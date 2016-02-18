@@ -4,6 +4,7 @@ boolean directed = false;
 int WIDTH = 640;
 int HEIGHT = 640;
 int j;
+boolean paused = false;
 
 color[] blues = {#256CA6, #1C87BD, #99AABB};
 color[] primaries = {#BBBB44, #BB8966, #99AABB};
@@ -11,8 +12,8 @@ color[] pinks = {#FFBBCC, #BB8888, #880000, #FFEEEE};
 color[] wintry = {#B3E3F4, #D6FFFB, #E3E3FF};
 color[] autumnal = {#A32A2A, #D4851C, #D83000, #AE700A, #FF6804};
 color[] uchicago = {#770026, #770026, #7B7672, #C5C4C2, #537D95, #3A222F};
-
-color[] colors = blues;
+color[][] allcolors = {blues, primaries, pinks, wintry, autumnal, uchicago};
+int colorindex = 0;
 
 void setup()
 {
@@ -26,9 +27,11 @@ void setup()
 
 void draw()
 {
+  color[] colors = allcolors[colorindex];
+  if (!paused) {
   int r = 0;
   if (directed) {
-   r = int(random(0,5));
+   r = int(random(0,6));
   } else {
    r = int(random(0,4));
   }
@@ -58,6 +61,7 @@ void draw()
  stroke(colors[choice]);
  fill(colors[choice]);
  rect(x,y, j/2,j/2);
+  }
 }
 
 void move(int rand)
@@ -98,4 +102,28 @@ void move(int rand)
    else
    x-=j;
  }
+}
+
+void keyPressed() {
+  if (key == 'p') {
+    paused = !paused;
+  }
+  if (key == 'r') {
+   setup(); 
+  }
+  if (key == 'd') {
+   directed = !directed; 
+  }
+  if (key == '>') {
+   colorindex = (colorindex + 1) % allcolors.length;
+  }
+  if (key == '<') {
+   colorindex = (colorindex + allcolors.length - 1) % allcolors.length;
+  }
+  if (key == '-') {
+   if (j > 1) {j--;}
+  }
+  if (key == '+') {
+    j++;
+  }
 }
